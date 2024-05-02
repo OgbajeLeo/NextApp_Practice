@@ -10,12 +10,18 @@ import { useSelector, useDispatch } from "react-redux"
 import { addUser, deleteUser } from "@/redux/slices/userSlice"
 
 
-const SignUpSchema = z.object({
+const SignUpSchema = z
+  .object({
     username: z.string().min(3,'Name cannot be less than 3 characters').max(30),
     email: z.string().email(),
     password: z.string().min(3).max(20),
-    confirmPassword:z.string(),
-});
+    confirmPassword:z.string().min(3).max(20),
+  
+})
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Password do not match',
+})
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
 export function SignUp() {
@@ -24,6 +30,8 @@ export function SignUp() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false); 
   const togglePasswordVisibility = () => setShowPassword(!showPassword); 
+  const [showPassword1, setShowPassword1] = useState(false); 
+  const togglePasswordVisibility1 = () => setShowPassword1(!showPassword1); 
 
 
   console.log(users)
@@ -115,7 +123,11 @@ export function SignUp() {
                   </div>
                   <button
                     type="button"
-                    className="absolute sm:inset-y-0 top-2.5 right-0 px-3 flex items-center focus:outline-none"
+                    className={
+                      errors.password?.message
+                        ? 'absolute  top-3 right-0 px-3 flex items-center focus:outline-none'
+                        : 'absolute sm:inset-y-0 top-2.5 right-0 px-3 flex items-center focus:outline-none'
+                    }
                     onClick={togglePasswordVisibility}
                   >
                     {!showPassword ? (
@@ -162,7 +174,7 @@ export function SignUp() {
                   <input
                     className="w-full rounded-[8px] px-3 py-2.5 bg-gray-200 border border-primary1 text-primary1 text-[12px]"
                     placeholder="Confirm password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword1 ? "text" : "password"}
                     {...register("confirmPassword")}
                   />
                   <div className="text-red-600 sm:text-[12px] text-[10px]">
@@ -173,10 +185,14 @@ export function SignUp() {
                   </div>
                   <button
                     type="button"
-                    className="absolute sm:inset-y-0 top-2.5 right-0 px-3 flex items-center focus:outline-none"
-                    onClick={togglePasswordVisibility}
+                    className={
+                      errors.confirmPassword?.message
+                        ? "absolute  top-3 right-0 px-3 flex items-center focus:outline-none"
+                        : "absolute sm:inset-y-0 top-2.5 right-0 px-3 flex items-center focus:outline-none"
+                    }
+                    onClick={togglePasswordVisibility1}
                   >
-                    {!showPassword ? (
+                    {!showPassword1 ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

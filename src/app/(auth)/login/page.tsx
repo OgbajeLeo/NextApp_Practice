@@ -95,7 +95,11 @@ export function Login() {
                   </div>
                   <button
                     type="button"
-                    className="absolute sm:inset-y-0 top-2.5 right-0 px-3 flex items-center focus:outline-none"
+                    className={
+                      errors.password
+                        ? "!bottom-3 absolute sm:inset-y-0 right-2"
+                        : "absolute sm:inset-y-0 top-2.5 right-0 px-3 flex items-center focus:outline-none"
+                    }
                     onClick={togglePasswordVisibility}
                   >
                     {!showPassword ? (

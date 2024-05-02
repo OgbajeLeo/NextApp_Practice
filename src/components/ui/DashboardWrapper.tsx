@@ -1,10 +1,18 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import PrivateRoute from "../PrivateRoute";
 
 const DashboardWrapper = ({ children }: any) => {
   const pathName = usePathname();
+ const  router =useRouter()
+
+
+  const handleLogout = () => {
+    alert('leooooooooooo')
+    localStorage.removeItem("isLoggedIn");
+    router.replace('/login')
+  }
   return (
     <PrivateRoute>
     <div>
@@ -43,16 +51,13 @@ const DashboardWrapper = ({ children }: any) => {
           >
             Profile
           </Link>
-          <Link
-            href="/"
-            className={
-              pathName == "/"
-                ? "bg-primary1 text-white px-2 py-1.5 rounded-[15px]"
-                : "px-2 py-1.5 font-medium rounded-[15px] text-red-500 !mt-10"
-            }
+          <div
+             
+              onClick={handleLogout}
+            className="px-2 cursor-pointer py-1.5 font-medium rounded-[15px] text-red-500 !mt-10"
           >
             Log out
-          </Link>
+          </div>
         </div>
       </div>
       {/* Nav bar */}
